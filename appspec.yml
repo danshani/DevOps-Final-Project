@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+hooks:
+  # Runs from the PREVIOUS revision (skipped on the very first deploy)
+  ApplicationStop:
+    - location: scripts/stop_container.sh
+      timeout: 60
+      runas: root
+  # Make sure Docker is present and running
+  BeforeInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 180
+      runas: root
+  # Pull the image from Docker Hub and run the container
+  ApplicationStart:
+    - location: scripts/start_container.sh
+      timeout: 180
+      runas: root
